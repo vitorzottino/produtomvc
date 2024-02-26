@@ -1,12 +1,31 @@
 package br.com.fiap.produtomvc.model;
 
+import jakarta.persistence.*;
+
+import java.util.Objects;
+
+
+@Entity
+@Table(name="tb_produto")
 public class ProdutoModel {
 
-    int id;
-    double valor;
-    String nome;
-    String descricao;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private double valor;
+    private String nome;
+    private String descricao;
+
+    public ProdutoModel() {
+    }
+
+    public ProdutoModel(int id, double valor, String nome, String descricao) {
+        this.id = id;
+        this.valor = valor;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
 
     public int getId() {
         return id;
@@ -38,6 +57,19 @@ public class ProdutoModel {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProdutoModel that = (ProdutoModel) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
