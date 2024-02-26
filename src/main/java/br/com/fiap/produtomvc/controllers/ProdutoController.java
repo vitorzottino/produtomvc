@@ -1,5 +1,6 @@
 package br.com.fiap.produtomvc.controllers;
 
+import br.com.fiap.produtomvc.model.ProdutoModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,20 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProdutoController {
 
 
-    @GetMapping
-    public String adicionarProduto() {
+    @GetMapping("/novo")
+    public String adicionarProduto(Model model) {
+
+        model.addAttribute("produto", new ProdutoModel());
 
         return "produto/novo-produto";
     }
 
-    @PostMapping
-    public String printarProduto(Model model){
+    @PostMapping("/salvar")
+    public String insertProduto(ProdutoModel produto) {
 
-        System.out.println(model.getAttribute("nome"));
-        System.out.println(model.addAttribute("nome"))  ;
+        System.out.println(produto.toString());
 
-
-        return "redirect:/produtos";
+        return "redirect:/produtos/novo";
     }
 
 }
