@@ -1,6 +1,10 @@
 package br.com.fiap.produtomvc.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -13,8 +17,16 @@ public class ProdutoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotNull(message = "Campo requerido")
+    @Positive(message = "O valor deve ser positivo")
     private double valor;
+
+    @NotBlank(message = "Campo requerido")
+    @Size(min = 3, message = "O nome ter no minimo 3 caracteres")
     private String nome;
+
+    @NotBlank(message = "Campo requerido")
     private String descricao;
 
     public ProdutoModel() {

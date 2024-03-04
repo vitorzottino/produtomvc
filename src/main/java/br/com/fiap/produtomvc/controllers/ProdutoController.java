@@ -1,6 +1,8 @@
 package br.com.fiap.produtomvc.controllers;
 
 import br.com.fiap.produtomvc.model.ProdutoModel;
+import br.com.fiap.produtomvc.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/produtos")
 public class ProdutoController {
+
+    @Autowired
+    private ProdutoRepository repository;
 
 
     @GetMapping("/novo")
@@ -23,7 +28,7 @@ public class ProdutoController {
     @PostMapping("/salvar")
     public String insertProduto(ProdutoModel produto) {
 
-        System.out.println(produto.toString());
+        repository.save(produto);
 
         return "redirect:/produtos/novo";
     }
