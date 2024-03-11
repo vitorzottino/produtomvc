@@ -25,7 +25,7 @@
                     <tr th:if="${produtos.empty}">
                         <td colspan="2">Sem produtos</td>
                     </tr>
-                    <!--Editar -->
+                     <!--Editar -->
                     <tr th:each="produto : ${produtos}" >
                         <td><span th:text="${produto.nome}"> Nome </span></td>
                         <td><span th:text="${produto.descricao}"> Descrição </span></td>
