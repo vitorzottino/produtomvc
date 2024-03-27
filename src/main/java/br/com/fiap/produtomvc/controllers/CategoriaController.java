@@ -3,7 +3,6 @@ package br.com.fiap.produtomvc.controllers;
 import br.com.fiap.produtomvc.models.Categoria;
 import br.com.fiap.produtomvc.repository.CategoriaRepository;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +16,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
-    CategoriaRepository repository;
+    final CategoriaRepository repository;
 
+    public CategoriaController(CategoriaRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping()
     @Transactional(readOnly = true)
     public String findAll(Model model) {
         model.addAttribute("categorias", repository.findAll());
+
         return "/categoria/listar-categorias";
     }
 
@@ -52,7 +54,7 @@ public class CategoriaController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public String delete(@PathVariable("id") Long id, Model model) {
+    public String delete(@PathVariable("id") Long id) {
         if (!repository.existsById(id)) {
             throw new IllegalArgumentException("Categoria inválida - id: " + id);
         }

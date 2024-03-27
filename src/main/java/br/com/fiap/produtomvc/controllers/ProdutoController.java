@@ -5,7 +5,6 @@ import br.com.fiap.produtomvc.models.Produto;
 import br.com.fiap.produtomvc.repository.CategoriaRepository;
 import br.com.fiap.produtomvc.repository.ProdutoRepository;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -20,11 +19,14 @@ import java.util.List;
 @RequestMapping("/produtos")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoRepository repository;
+    private final ProdutoRepository repository;
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
+
+    public ProdutoController(ProdutoRepository repository, CategoriaRepository categoriaRepository) {
+        this.repository = repository;
+        this.categoriaRepository = categoriaRepository;
+    }
 
     @ModelAttribute("categorias")
     public List<Categoria> categorias() {
@@ -81,7 +83,7 @@ public class ProdutoController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public String delete(@PathVariable("id") Long id, Model model) {
+    public String delete(@PathVariable("id") Long id) {
         if (!repository.existsById(id)) {
             throw new IllegalArgumentException("Produto inválido - id: " + id);
         }
