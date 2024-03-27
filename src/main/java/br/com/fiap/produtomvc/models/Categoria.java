@@ -3,6 +3,8 @@ package br.com.fiap.produtomvc.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,9 +15,19 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Size(min = 3, message = "O nome deve ter no mínimo 3 carateres")
     private String nome;
+
+    @OneToMany(mappedBy = "categoria")
+    private final List<Produto> produtos = new ArrayList<>();
+
+    public Categoria() {
+    }
+
+    public Categoria(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
 
     public Long getId() {
         return id;
@@ -38,6 +50,10 @@ public class Categoria {
         return "Categoria{" + "id=" + id + ", nome='" + nome + '\'' + '}';
     }
 
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,3 +67,4 @@ public class Categoria {
         return Objects.hash(id);
     }
 }
+

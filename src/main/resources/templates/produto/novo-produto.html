@@ -24,7 +24,7 @@
                     <div class="row mb-3">
                         <label for="nome" class="col-sm-1 col-form-label">Nome:</label>
                         <div class="col-sm-5">
-                            <input id="nome" class="form-control" type="text" th:field="*{nome}" />
+                            <input id="nome" class="form-control" type="text" th:field="*{nome}"/>
                         </div>
                         <div class="col-sm-5">
                             <span class="mensagem" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
@@ -37,7 +37,8 @@
                             <input id="descricao" class="form-control" type="text" th:field="*{descricao}">
                         </div>
                         <div class="col-sm-5">
-                            <span class="mensagem" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></span>
+                            <span class="mensagem" th:if="${#fields.hasErrors('descricao')}"
+                                  th:errors="*{descricao}"></span>
                         </div>
                     </div>
 
@@ -52,7 +53,25 @@
                         </div>
                     </div>
 
-                    <input class="btn btn-primary" type="submit" value="Salvar" />
+                    <div class="form-row">
+                        <div class="row mb-3">
+                            <label class="col-sm-1 col-form-label">Categoria:</label>
+                            <div class="col-sm-3">
+                                <select class="chosen-select form-control" data-placehold="categoria" id="categoria"
+                                        name="categoria" th:field="*{categoria}">
+                                    <option th:each="categoria : ${categorias}"
+                                            th:text="${categoria.nome}"
+                                            th:value="${categoria.id}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-sm-5">
+                               <span class="mensagem" th:errors="*{caterogia}"
+                                     th:if="${#fields.hasErrors('categoria')}"> </span>
+                            </div>
+                        </div>
+
+                        <input class="btn btn-primary" type="submit" value="Salvar"/>
                 </form>
 
             </div>
@@ -61,5 +80,3 @@
 </div>
 </body>
 </html>
-
-

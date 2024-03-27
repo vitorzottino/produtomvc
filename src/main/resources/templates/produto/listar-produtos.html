@@ -17,6 +17,7 @@
                         <th>Nome</th>
                         <th>Descrição</th>
                         <th>Valor</th>
+                        <th>Categoria</th>
                         <th>Ações</th>
                     </tr>
                     </thead>
@@ -28,10 +29,10 @@
                         <td><span th:text="${produto.nome}"> Nome </span></td>
                         <td><span th:text="${produto.descricao}"> Descrição </span></td>
                         <td><span th:text="${produto.valor}"> Valor </span></td>
+                        <td><span th:text="${produto.categoria.nome}"> Categoria </span></td>
                         <td>
                             <form th:action="@{/produtos/{id}(id=${produto.id})}" th:object="${produto}" method="post">
                                 <input type="hidden" name="_method" value="delete">
-
                                 <input class="btn btn-danger btn-xs" type="submit" value="Excluir"
                                        th:data-confirm-delete="|Deseja excluir ${produto.nome}?|"
                                        onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"/>
@@ -40,11 +41,10 @@
                         <td>
                             <form action="" th:action="@{/produtos/{id}(id=${produto.id})}" th:object="${produto}"
                                   method="get">
-                                <!--                                <a class="btn btn-primary btn-xs"-->
-                                <!--                                   th:href="@{/produtos/{id}(id=${produto.id})}"> Editar</a>-->
                                 <input class="btn btn-primary btn-xs" type="submit" value="Editar">
                             </form>
-
+                            <input class="btn btn-primary btn-xs" type="submit" value="Editar">
+                            </form>
 
                         </td>
                     </tr>
