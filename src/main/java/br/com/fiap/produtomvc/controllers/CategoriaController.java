@@ -1,9 +1,9 @@
 package br.com.fiap.produtomvc.controllers;
 
 import br.com.fiap.produtomvc.models.Categoria;
-import br.com.fiap.produtomvc.repository.CategoriaRepository;
+import br.com.fiap.produtomvc.services.CategoriaService;
 import jakarta.validation.Valid;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -11,30 +11,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 
 @Controller
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    final CategoriaRepository repository;
-
-    public CategoriaController(CategoriaRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private CategoriaService service;
 
     @GetMapping()
-    @Transactional(readOnly = true)
     public String findAll(Model model) {
-        model.addAttribute("categorias", repository.findAll());
+        List<Categoria> categorias = service.findAll();
+        model.addAttribute("categorias", categorias);
 
         return "/categoria/listar-categorias";
     }
 
     @GetMapping("/{id}")
-    @Transactional(readOnly = true)
     public String findById(@PathVariable("id") Long id, Model model) {
-
-        Categoria categoria = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Categoria inválida - id: " + id));
+        Categoria categoria = service.findById(id);
         model.addAttribute("categoria", categoria);
 
         return "/categoria/editar-categoria";
@@ -47,7 +43,7 @@ public class CategoriaController {
             categoria.setId(id);
             return "/categoria/editar-categoria";
         }
-        repository.save(categoria);
+        service.update(id, categoria);
 
         return "redirect:/categorias";
     }
@@ -55,15 +51,7 @@ public class CategoriaController {
     @DeleteMapping("/{id}")
     @Transactional
     public String delete(@PathVariable("id") Long id) {
-        if (!repository.existsById(id)) {
-            throw new IllegalArgumentException("Categoria inválida - id: " + id);
-        }
-        try {
-            repository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("Falha integridade referencial - id: " + id);
-        }
-
+        service.delete(id);
         return "redirect:/categorias";
     }
 
@@ -75,15 +63,14 @@ public class CategoriaController {
     }
 
     @PostMapping()
-    @Transactional
     public String insert(@Valid Categoria categoria, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             return "categoria/nova-categoria";
         }
-        repository.save(categoria);
+        service.insert(categoria);
         attributes.addFlashAttribute("mensagem", "Categoria salva com sucesso");
 
-        return "redirect:/categorias/form";
+        return "redirect:/categorias";
     }
 
 }

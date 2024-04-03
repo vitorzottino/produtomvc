@@ -4,7 +4,9 @@ import br.com.fiap.produtomvc.models.Categoria;
 import br.com.fiap.produtomvc.models.Produto;
 import br.com.fiap.produtomvc.repository.CategoriaRepository;
 import br.com.fiap.produtomvc.repository.ProdutoRepository;
+import br.com.fiap.produtomvc.services.ProdutoService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -19,14 +21,13 @@ import java.util.List;
 @RequestMapping("/produtos")
 public class ProdutoController {
 
-    private final ProdutoRepository repository;
+    @Autowired
+    private ProdutoRepository repository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+    @Autowired
+    private ProdutoService service;
 
-    private final CategoriaRepository categoriaRepository;
-
-    public ProdutoController(ProdutoRepository repository, CategoriaRepository categoriaRepository) {
-        this.repository = repository;
-        this.categoriaRepository = categoriaRepository;
-    }
 
     @ModelAttribute("categorias")
     public List<Categoria> categorias() {
@@ -41,12 +42,12 @@ public class ProdutoController {
     }
 
     @PostMapping()
-    @Transactional
     public String insert(@Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             return "produto/novo-produto";
         }
-        repository.save(produto);
+
+        service.insert(produto);
         attributes.addFlashAttribute("mensagem", "Produto salvo com sucesso");
 
         return "redirect:/produtos/form";
