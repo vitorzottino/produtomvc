@@ -56,7 +56,7 @@ public class ProdutoController {
     @GetMapping()
     @Transactional(readOnly = true)
     public String findAll(Model model) {
-        model.addAttribute("produtos", repository.findAll());
+        model.addAttribute("produtos", service.findAll());
 
         return "/produto/listar-produtos";
     }
@@ -64,7 +64,7 @@ public class ProdutoController {
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public String findById(@PathVariable("id") Long id, Model model) {
-        Produto produto = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Produto inválido - id: " + id));
+        Produto produto = service.findById(id);
         model.addAttribute("produto", produto);
 
         return "/produto/editar-produto";
@@ -77,7 +77,7 @@ public class ProdutoController {
             produto.setId(id);
             return "/produto/editar-produto";
         }
-        repository.save(produto);
+        service.insert(produto);
 
         return "redirect:/produtos";
     }
@@ -89,7 +89,7 @@ public class ProdutoController {
             throw new IllegalArgumentException("Produto inválido - id: " + id);
         }
         try {
-            repository.deleteById(id);
+            service.delete(id);
         } catch (Exception e) {
             throw new IllegalArgumentException("Produto inválido - id: " + id);
         }
